@@ -1,4 +1,3 @@
-// backend/middleware/authMiddleware.js
 import jwt from "jsonwebtoken";
 
 export const verifyToken = (req, res, next) => {
@@ -14,3 +13,4 @@ export const verifyToken = (req, res, next) => {
     next();
   });
 };
+export default verifyToken;

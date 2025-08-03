@@ -16,7 +16,9 @@ export default function DestinationPage() {
     async function fetchPhotos() {
       try {
         const res = await fetch(
-          `https://api.unsplash.com/search/photos?query=${location}&client_id=${import.meta.env.VITE_UNSPLASH_KEY}&per_page=6`
+          `https://api.unsplash.com/search/photos?query=${location}&client_id=${
+            import.meta.env.VITE_UNSPLASH_KEY
+          }&per_page=6`
         );
         const data = await res.json();
         setPhotos(data.results || []);
@@ -27,7 +29,27 @@ export default function DestinationPage() {
     fetchPhotos();
   }, [location]);
 
-  // Handle Itinerary Generation
+  // Save Search to Backend
+  useEffect(() => {
+    async function saveSearch() {
+      try {
+        const token = localStorage.getItem("token"); // optional for auth
+        await fetch("http://localhost:5000/api/history", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token && { Authorization: `Bearer ${token}` })
+          },
+          body: JSON.stringify({ location })
+        });
+      } catch (err) {
+        console.error("Error saving search", err);
+      }
+    }
+    saveSearch();
+  }, [location]);
+
+  // Generate Itinerary
   const handleGenerateItinerary = async () => {
     if (!startDate || !endDate || !budget) {
       alert("Please fill all fields before generating itinerary.");
@@ -53,7 +75,6 @@ export default function DestinationPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      
       {/* HEADER */}
       <header className="bg-white shadow p-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold text-green-700">TripSage</h1>
@@ -69,10 +90,8 @@ export default function DestinationPage() {
 
       {/* MAIN CONTENT */}
       <div className="flex flex-1">
-        
         {/* LEFT: Photos + Form + Itinerary */}
         <div className="w-2/3 p-6 overflow-y-auto">
-          
           {/* Photos */}
           <h2 className="text-2xl font-bold text-green-700 mb-4">
             Photos of {location}
@@ -95,21 +114,20 @@ export default function DestinationPage() {
           {/* Dates & Budget Section */}
           <section className="max-w-6xl mx-auto mt-6 p-4 bg-white shadow rounded-lg">
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-              
               {/* Dates */}
               <div className="flex flex-col">
                 <label className="font-semibold mb-1">Enter Dates</label>
                 <div className="flex gap-2">
-                  <input 
-                    type="date" 
-                    value={startDate} 
-                    onChange={(e) => setStartDate(e.target.value)} 
+                  <input
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
                     className="border p-2 rounded"
                   />
-                  <input 
-                    type="date" 
-                    value={endDate} 
-                    onChange={(e) => setEndDate(e.target.value)} 
+                  <input
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
                     className="border p-2 rounded"
                   />
                 </div>
@@ -118,8 +136,8 @@ export default function DestinationPage() {
               {/* Budget */}
               <div className="flex flex-col">
                 <label className="font-semibold mb-1">Enter Budget (₹)</label>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   placeholder="Budget in Rupees"
                   value={budget}
                   onChange={(e) => setBudget(e.target.value)}
