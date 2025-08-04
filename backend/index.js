@@ -21,7 +21,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "*",
+    origin: "*", // 🔹 After frontend deploy, replace * with frontend URL
     methods: ["GET", "POST"],
   },
 });
@@ -53,31 +53,21 @@ app.use("/api/chat", chatRoute);
 io.on("connection", (socket) => {
   console.log(`🔵 User connected: ${socket.id}`);
 
-  // ✅ Join personal room for private messages
   socket.on("joinRoom", ({ userId }) => {
     if (userId) {
       socket.join(userId);
       console.log(`User ${socket.id} joined personal room for userId: ${userId}`);
-    } else {
-      console.warn(`User ${socket.id} tried to join room without userId`);
     }
   });
 
-  // ✅ Handle sending + saving messages
   socket.on("sendMessage", async (messageData) => {
     try {
-      const { roomId, senderId,senderName, receiverId, text } = messageData;
+      const { roomId, senderId, senderName, receiverId, text } = messageData;
+      if (!roomId || !senderId || !senderName || !receiverId || !text) return;
 
-      if (!roomId || !senderId || !senderName || !receiverId || !text) {
-        console.error("Missing message data:", messageData);
-        return;
-      }
-
-      // Save message to DB
-      const chat = new Chat({ senderId,senderName, receiverId, text });
+      const chat = new Chat({ senderId, senderName, receiverId, text });
       await chat.save();
 
-      // ✅ Emit to chat room for live chat
       io.to(roomId).emit("receiveMessage", {
         senderId,
         senderName,
@@ -85,7 +75,6 @@ io.on("connection", (socket) => {
         timestamp: new Date(),
       });
 
-      // ✅ Emit to receiver's personal inbox room
       io.to(receiverId).emit("newInboxMessage", {
         senderId,
         senderName,
@@ -94,13 +83,11 @@ io.on("connection", (socket) => {
         timestamp: new Date(),
       });
 
-      console.log(`💾 Message saved & sent to room ${roomId}`);
     } catch (err) {
       console.error("❌ Error saving chat:", err);
     }
   });
 
-  // ✅ Handle disconnect
   socket.on("disconnect", () => {
     console.log(`🔴 User disconnected: ${socket.id}`);
   });
