@@ -42,7 +42,7 @@ useEffect(() => {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/history", {
+        const res = await fetch("https://tripsage-backend.onrender.com/api/history", {
           headers: {
             "Content-Type": "application/json",
             ...(token && { Authorization: `Bearer ${token}` }),
@@ -64,7 +64,7 @@ useEffect(() => {
   useEffect(() => {
     const fetchRelated = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/guides/all");
+        const res = await fetch("https://tripsage-backend.onrender.com/api/guides/all");
         if (!res.ok) return console.error("Failed to fetch guides");
 
         const data = await res.json();
@@ -88,7 +88,7 @@ useEffect(() => {
             const fetchChats = async () => {
           try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`http://localhost:5000/api/chat/inbox/${userId}`, {
+            const res = await fetch(`https://tripsage-backend.onrender.com/api/chat/inbox/${userId}`, {
               headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}` // ✅ Add token
@@ -206,8 +206,8 @@ useEffect(() => {
                       {guide.photos.slice(0, 2).map((photo, i) => {
                         const photoUrl =
                           typeof photo === "string"
-                            ? `http://localhost:5000${photo}`
-                            : `http://localhost:5000${photo.url}`;
+                            ? `https://tripsage-backend.onrender.com${photo}`
+                            : `https://tripsage-backend.onrender.com${photo.url}`;
                         return (
                           <img
                             key={i}

@@ -44,7 +44,7 @@ export default function GuideDestinationPage() {
     async function fetchUploadedPhotos() {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/guides/photos?location=${encodeURIComponent(
+          `https://tripsage-backend.onrender.com/api/guides/photos?location=${encodeURIComponent(
             location
           )}`,
           {
@@ -67,7 +67,7 @@ export default function GuideDestinationPage() {
       return;
     }
     try {
-      const res = await fetch("http://localhost:5000/api/guides", {
+      const res = await fetch("https://tripsage-backend.onrender.com/api/guides", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -99,7 +99,7 @@ export default function GuideDestinationPage() {
 
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/api/guides/upload-photos", {
+      const res = await fetch("https://tripsage-backend.onrender.com/api/guides/upload-photos", {
         method: "POST",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: formData,
@@ -190,7 +190,7 @@ export default function GuideDestinationPage() {
                 {yourPhotos.map((photo, index) => (
                   <img
                     key={index}
-                    src={`http://localhost:5000${photo.url}`}
+                    src={`https://tripsage-backend.onrender.com${photo.url}`}
                     alt="Your Uploaded"
                     className="rounded shadow h-24 object-cover"
                   />
@@ -211,7 +211,7 @@ export default function GuideDestinationPage() {
                 {publicPhotos.map((photo, index) => (
                   <img
                     key={index}
-                    src={`http://localhost:5000${photo.url}`}
+                    src={`https://tripsage-backend.onrender.com${photo.url}`}
                     alt="Public Uploaded"
                     className="rounded shadow h-24 object-cover"
                   />

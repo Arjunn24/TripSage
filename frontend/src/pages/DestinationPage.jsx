@@ -34,7 +34,7 @@ export default function DestinationPage() {
     async function saveSearch() {
       try {
         const token = localStorage.getItem("token"); // optional for auth
-        await fetch("http://localhost:5000/api/history", {
+        await fetch("https://tripsage-backend.onrender.com/api/history", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export default function DestinationPage() {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/itinerary/generate", {
+      const res = await fetch("https://tripsage-backend.onrender.com/api/itinerary/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ location, startDate, endDate, budget }),

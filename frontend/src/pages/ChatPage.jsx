@@ -24,7 +24,7 @@ export default function ChatPage() {
   socket.emit("joinRoom", { userId });
 
   // ✅ Fetch chat history from API
-  fetch(`http://localhost:5000/api/chat/${authorId}`, {
+  fetch(`https://tripsage-backend.onrender.com/api/chat/${authorId}`, {
   headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
 })
   .then(res => res.json())

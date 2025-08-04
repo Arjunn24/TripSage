@@ -1,7 +1,7 @@
 // src/socket.js
 import { io } from "socket.io-client";
 
-const SOCKET_URL = "http://localhost:5000";
+const SOCKET_URL = "https://tripsage-backend.onrender.com";
 
 // Create only one socket connection
 export const socket = io(SOCKET_URL, {

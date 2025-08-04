@@ -12,7 +12,7 @@ export default function GuideDetailsPage() {
   useEffect(() => {
     async function fetchGuide() {
       try {
-        const res = await fetch(`http://localhost:5000/api/guides/${encodeURIComponent(location)}`);
+        const res = await fetch(`https://tripsage-backend.onrender.com/api/guides/${encodeURIComponent(location)}`);
         if (!res.ok) throw new Error("Failed to fetch guide");
         const data = await res.json();
         setGuide(data);
@@ -87,7 +87,7 @@ export default function GuideDetailsPage() {
               {userPhotos.map((photo, i) => (
                 <img
                   key={i}
-                  src={`http://localhost:5000${photo.url}`}
+                  src={`https://tripsage-backend.onrender.com${photo.url}`}
                   alt="Guide"
                   className="rounded shadow h-32 object-cover"
                 />
